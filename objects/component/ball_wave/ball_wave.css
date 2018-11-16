@@ -1,0 +1,62 @@
+.box {
+    position: relative;
+}
+
+.container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    border: 5px solid;
+    border-color: tomato;
+    /*default*/
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 1);
+    /*default*/
+}
+
+.sea {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: tomato;
+    /*default*/
+}
+
+.wave {
+    content: "";
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -150%;
+    /*default*/
+    left: -50%;
+    background-color: rgba(255, 255, 255, 1);
+    /*default*/
+    border-radius: 45%;
+    transform: rotate(0);
+    animation: rotate 6s linear infinite;
+    z-index: 10;
+}
+
+.text_block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: maroon;
+    text-shadow: -1px 0 #551111, 0 1px 3px #551111, 1px 0 #551111, 0 -1px #551111;
+    position: absolute;
+    z-index: 99;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}

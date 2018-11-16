@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>小番茄</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="objects/component/ball_wave/ball_wave.js"></script>
+    <link href="objects/component/ball_wave/ball_wave.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="tomatoBall" style='font-size: 3em'>
+        <wave-ball ball-size='300px' v-bind:ball-color='ballColor' v-bind:space-color='spaceColor' v-bind:ball-text='ballText'
+            v-bind:wave-top='waveTop'>
+        </wave-ball>
+    </div>
+    <script>
+        vm = new Vue({
+            el: '#tomatoBall',
+            data: {
+                ballText: '20:00',
+                ballColor: 'tomato',
+                spaceColor: 'white',
+                waveTop: 0.8
+            }
+        })
+    </script>
+</body>
+
+</html>
