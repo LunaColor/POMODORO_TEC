@@ -7,29 +7,250 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>小番茄</title>
 
+    <link href="objects/css/style.css" rel="stylesheet" type="text/css">
+    <link href="objects/component/ball-wave/ball-wave.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="objects/component/ball_wave/ball_wave.js"></script>
-    <link href="objects/component/ball_wave/ball_wave.css" rel="stylesheet">
+    <script src="objects/component/ball-wave/ball-wave.js"></script>
 
+    <script>
+        //work
+        var workTime;
+        var workTimeLast;
+        var workPlaying;
+        //rest
+        var restTime;
+        var restTimeLast;
+        var restPlaying;
+
+        function workPlay() {
+            if (workTimeLast == null || isNaN(workTimeLast) || workTimeLast <= 0) {
+                //倒數完成
+                workEnd();
+            } else {
+                mainBallVue.ballText = getTimeStr(workTimeLast);
+                mainBallVue.waveTop = 1 - (workTimeLast / workTime);
+                mainBallVue.ballColor = getWorkBallColor(mainBallVue.waveTop);
+                secondBallVue.waveTop = (workTimeLast / workTime);
+                secondBallVue.ballColor = getRestBallColor(secondBallVue.waveTop);
+                workPlaying = setTimeout(workPlay, 1000);
+                workTimeLast -= 1000;
+            }
+        }
+
+        function workEnd() {
+            console.log("WORK_END:" + new Date());
+            setUpVue.currentfuncButton = 4;
+            mainBallVue.waveTop = 1;
+            mainBallVue.ballText = 'FINISH!'
+            secondBallVue.waveTop = 0;
+        }
+
+        function restPlay() {
+            if (restTimeLast == null || isNaN(restTimeLast) || restTimeLast <= 0) {
+                //倒數完成
+                restEnd();
+            } else {
+                console.log((restTimeLast / 1000) + " sec...");
+                mainBallVue.ballText = getTimeStr(restTimeLast);
+                mainBallVue.waveTop = 1 - (restTimeLast / restTime);
+                mainBallVue.ballColor = getRestBallColor(mainBallVue.waveTop);
+                secondBallVue.waveTop = (restTimeLast / restTime);
+                secondBallVue.ballColor = getWorkBallColor(secondBallVue.waveTop);
+                restPlaying = setTimeout(restPlay, 1000);
+                restTimeLast -= 1000;
+            }
+        }
+        function restEnd() {
+            console.log("REST_END:" + new Date());
+            setUpVue.currentfuncButton = 1;
+            mainBallVue.waveTop = 1;
+            mainBallVue.ballText = 'FINISH!'
+            secondBallVue.waveTop = 0;
+        }
+
+        function getTimeStr(microsec) {
+            var hr = Math.floor(microsec / (60 * 60 * 1000))
+            var min = Math.floor((microsec % (60 * 60 * 1000)) / (60 * 1000));
+            var sec = Math.floor((microsec % (60 * 1000)) / 1000)
+            return paddingLeft('0', String(hr), 2) + ':' + paddingLeft('0', String(min), 2) + ':' + paddingLeft('0', String(sec), 2);
+        }
+
+        function paddingLeft(insert, str, length) {
+            if (str.length >= length) {
+                return str;
+            }
+            if (insert.length + str.length > length) {
+                return str;
+            }
+            else {
+                return paddingLeft(insert, insert + str, length);
+            }
+        }
+
+        function getWorkBallColor(waveTop) {
+            if (waveTop >= 0.8) {
+                return 'rgb(255, 99, 71)'
+            }
+            else if (waveTop >= 0.6) {
+                return 'rgb(255, 138, 54)'
+            }
+            else if (waveTop >= 0.4) {
+                return 'rgb(224, 177, 36)'
+            }
+            else if (waveTop >= 0.2) {
+                return 'rgb(223, 216, 18)'
+            }
+            else {
+                return 'rgb(223, 255, 0)'
+            }
+        }
+        function getRestBallColor(waveTop) {
+            if (waveTop >= 0.8) {
+                return 'rgb(70, 190, 217)'
+            }
+            else if (waveTop >= 0.6) {
+                return 'rgb(85, 220, 217)'
+            }
+            else if (waveTop >= 0.4) {
+                return 'rgb(100, 234, 217)'
+            }
+            else if (waveTop >= 0.2) {
+                return 'rgb(114, 238, 255)'
+            }
+            else {
+                return 'rgb(153, 242, 255)'
+            }
+        }
+    </script>
 </head>
 
 <body>
-    <div id="tomatoBall" style='font-size: 3em'>
-        <wave-ball ball-size='300px' v-bind:ball-color='ballColor' v-bind:space-color='spaceColor' v-bind:ball-text='ballText'
-            v-bind:wave-top='waveTop'>
-        </wave-ball>
+    <div class="balls">
+        <div>
+            <div id="mainTomatoBall" class="ball ball-now">
+                <wave-ball ball-size='100%' v-bind:ball-color='ballColor' v-bind:space-color='spaceColor'
+                    v-bind:ball-text='ballText' v-bind:wave-top='waveTop'>
+                </wave-ball>
+            </div>
+        </div>
+        <div>
+            <div id="secondTomatoBall" class="ball ball-wait">
+                <wave-ball ball-size='100%' v-bind:ball-color='ballColor' v-bind:space-color='spaceColor'
+                    v-bind:ball-text='ballText' v-bind:wave-top='waveTop'>
+                </wave-ball>
+            </div>
+        </div>
     </div>
     <script>
-        vm = new Vue({
-            el: '#tomatoBall',
+        mainBallVue = new Vue({
+            el: '#mainTomatoBall',
             data: {
-                ballText: '20:00',
+                ballText: '00:00:00',
                 ballColor: 'tomato',
                 spaceColor: 'white',
-                waveTop: 0.8
+                waveTop: 0.5
+            }
+        })
+    </script>
+    <script>
+        secondBallVue = new Vue({
+            el: '#secondTomatoBall',
+            data: {
+                ballText: '',
+                ballColor: 'darkcyan',
+                spaceColor: 'white',
+                waveTop: 0.5
+            }
+        })
+    </script>
+    <div class="set-up-page">
+        <div id="setUp" class="set-up-content">
+            <div class="input-block">
+                <div class="input-time">
+                    <label for="workTimeInput">WORK TIME</label>
+                    <input id="workTimeInput" v-model='workTimeMin'>
+                </div>
+                <div class="input-time">
+                    <label for="restTimeInput">REST TIME</label>
+                    <input id="restTimeInput" v-model='restTimeMin'>
+                </div>
+            </div>
+            <!-- <button>RESET</button>-->
+            <button v-for="tab in funcButtons" v-show='tab.id==currentfuncButton' v-bind:key="tab.id" v-on:click='functionButtonClick(tab.id)'>{{
+                tab.text }}</button>
+
+        </div>
+    </div>
+    <script>
+        setUpVue = new Vue({
+            el: '#setUp',
+            data: {
+                workTimeMin: 25,
+                restTimeMin: 5,
+                currentfuncButton: 1,
+                funcButtons: [
+                    { id: 1, text: 'WORK NOW', note: 'as workReady' },//initial or restEnd. 
+                    { id: 2, text: 'STOP', note: 'as working' },
+                    { id: 3, text: 'KEEP WORKING', note: 'as workPause' },
+                    { id: 4, text: 'REST NOW', note: 'as restReady' },//workEnd.
+                    { id: 5, text: 'STOP', note: 'as resting' },
+                    { id: 6, text: 'KEEP RESTING', note: 'as restPause' },
+                ]
+            },
+            methods: {
+                functionButtonClick: function (id) {
+                    switch (id) {
+                        case 1: this.workStart(); break;
+                        case 2: this.workPause(); break;
+                        case 3: this.workGoOn(); break;
+                        case 4: this.restStart(); break;
+                        case 5: this.restPause(); break;
+                        case 6: this.restGoOn(); break;
+                        default: return;
+                    }
+                },
+                //WORK--------------------------
+                workStart: function () {
+                    if (isNaN(this.workTimeMin)) {
+                        return;
+                    }
+                    this.currentfuncButton = 2;
+                    clearTimeout(workPlaying);
+                    workTime = this.workTimeMin * 60 * 1000;
+                    workTimeLast = workTime;
+                    console.log('workStartTime:' + new Date() + "...");
+                    workPlay();
+                },
+                workPause: function () {
+                    this.currentfuncButton = 3;
+                    clearTimeout(workPlaying);
+                },
+                workGoOn: function () {
+                    this.currentfuncButton = 2;
+                    workPlay();
+                },
+                //REST--------------------------
+                restStart: function () {
+                    if (isNaN(this.restTimeMin)) {
+                        return;
+                    }
+                    this.currentfuncButton = 5;
+                    clearTimeout(restPlaying);
+                    restTime = this.restTimeMin * 60 * 1000;
+                    restTimeLast = restTime;
+                    console.log('restStartTime:' + new Date() + "...");
+                    restPlay();
+                },
+                restPause: function () {
+                    this.currentfuncButton = 6;
+                    clearTimeout(restPlaying);
+                },
+                restGoOn: function () {
+                    this.currentfuncButton = 5;
+                    restPlay();
+                }
             }
         })
     </script>
 </body>
-
 </html>
