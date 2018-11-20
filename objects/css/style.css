@@ -3,6 +3,7 @@ body {
     display: flex;
     justify-content: center;
     min-height: 97vh;
+    min-width:200px;
 }
 
 .balls {
@@ -12,7 +13,7 @@ body {
     flex-direction: row;
     width: 90%;
     max-width: 900px;
-    justify-content: center
+    justify-content: center;
 }
 
 .ball {
@@ -44,6 +45,63 @@ body {
     flex-direction: row;
 
 }
+
+.home-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0,0.3);
+    overflow: hidden;
+}
+
+.init-home-view{
+    display: flex;
+    flex-direction: row;
+    transform: translate(-100vw, 0);
+    /*滿屏transform: translate(-100vh, 0);*/
+    /*退出transform: translate(100vw, 0);*/
+ }
+ 
+.home-view{
+   display: flex;
+   flex-direction: row;
+   transform: translate(100vw, 0);
+   /*滿屏transform: translate(-100vh, 0);*/
+   /*退出transform: translate(100vw, 0);*/
+}
+
+.home-view-head {
+    border-radius: 50% 0 0 50%;
+    height: 100vh;
+    width: 100vh;
+    background-color:  rgba(0, 207, 0,0.5);
+}
+.home-view-head::after
+{
+    position: absolute;
+    content:'';
+    top: 0;
+    left: 100vh;
+    height: 100vh;
+    width: 150vmax;
+    background-color:  rgba(0, 207, 0,0.5);
+}
+
+.go-home-animat{
+    animation-name:go-home;
+    animation-duration:1s;
+    animation-fill-mode:forwards;
+}
+
+.leave-home-animat{
+    animation-name:go-home;
+    animation-duration:1s;
+    animation-direction:reverse;
+    animation-fill-mode:forwards;
+}
 /*S*/
 @media (max-width:769px) {
     .balls {
@@ -61,11 +119,30 @@ body {
     .ball-now {
         width: 70vw;
         height: 70vw;
+        min-width: 140px;
+        min-height: 140px;
     }
 
     .ball-wait {
         width: 35vw;
         height: 35vw;
         margin-top: 0px;
+        min-width: 70px;
+        min-height: 70px;
     }
+}
+/*SS*/
+@media (max-width:300px) {
+    #mainTomatoBall
+    {
+        font-size: 30px;
+    }
+}
+
+
+@keyframes go-home {
+    0% { margin-left :0;}
+  20% { margin-left:-70vh; }
+  80% { margin-left:-50vh; }
+  100% {margin-left:-150vmax;}
 }

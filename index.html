@@ -11,6 +11,7 @@
     <link href="objects/component/ball-wave/ball-wave.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="objects/component/ball-wave/ball-wave.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script>
         //work
@@ -121,10 +122,46 @@
                 return 'rgb(153, 242, 255)'
             }
         }
+        function homePageLeaave() {
+            if ($('#homeView').hasClass('leave-home-animat')) {
+                $('#homePage').hide();
+                $('#homeView').removeClass('leave-home-animat');
+                return
+            }
+            $('#homePageLeaaveBtn').fadeOut(500);
+            $('#homeView').removeClass('init-home-view');
+            $('#homeView').addClass('home-view');
+            $('#homeView').addClass('leave-home-animat');
+            setTimeout(homePageLeaave, 1000);
+        }
+
+        function homePageGo() {
+            $('#homePage').show();
+            if ($('#homeView').hasClass('go-home-animat')) {
+                $('#homePageLeaaveBtn').fadeIn(1000);
+                $('#homeView').removeClass('go-home-animat');
+                $('#homeView').removeClass('home-view');
+                $('#homeView').addClass('init-home-view');
+                return
+            }
+            $('#homeView').addClass('go-home-animat');
+            setTimeout(homePageGo, 1000);
+        }
     </script>
 </head>
 
 <body>
+    <div id="homePage" class="home-page">
+        <div id="homeView" class="init-home-view">
+            <div class="home-view-head">
+            </div>
+        </div>
+        <button id="homePageLeaaveBtn" style="position: fixed;top: 0;left: 0;" onclick="homePageLeaave()">離開設定</button>
+    </div>
+
+    <button id="homePageGoBtn" style="position: fixed;top: 50;left: 50;" onclick="homePageGo()">回設定</button>
+
+
     <div class="balls">
         <div>
             <div id="mainTomatoBall" class="ball ball-now">
@@ -253,4 +290,5 @@
         })
     </script>
 </body>
+
 </html>
