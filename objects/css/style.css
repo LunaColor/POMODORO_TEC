@@ -60,7 +60,7 @@ body {
 .init-home-view{
     display: flex;
     flex-direction: row;
-    transform: translate(-100vw, 0);
+    transform: translate(-100vh, 0);
     /*滿屏transform: translate(-100vh, 0);*/
     /*退出transform: translate(100vw, 0);*/
  }
@@ -142,7 +142,7 @@ body {
 
 @keyframes go-home {
     0% { margin-left :0;}
-  20% { margin-left:-70vh; }
-  80% { margin-left:-50vh; }
+  20% { margin-left:-70vw;}
+  80% { margin-left:-60vw;}
   100% {margin-left:-150vmax;}
 }
