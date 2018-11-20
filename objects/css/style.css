@@ -68,6 +68,10 @@ body {
 .home-view{
    display: flex;
    flex-direction: row;
+   -webkit-transform: translate(100vw, 0);
+   -moz-transform: translate(100vw, 0);
+   -ms-transform: translate(100vw, 0);
+   -o-transform: translate(100vw, 0);
    transform: translate(100vw, 0);
    /*滿屏transform: translate(-100vh, 0);*/
    /*退出transform: translate(100vw, 0);*/
@@ -86,17 +90,54 @@ body {
     top: 0;
     left: 100vh;
     height: 100vh;
-    width: 150vmax;
+    /*width: 150vmax;*//*IE 不支援vmax*/
+    width: calc(150 * (1vw + 1vh - 1vmin));
     background-color:  rgba(0, 207, 0,0.5);
 }
 
 .go-home-animat{
+    -webkit-animation-name:go-home;
+    -webkit-animation-duration:1s;
+    -webkit-animation-fill-mode:forwards;
+
+    -moz-animation-name:go-home;
+    -moz-animation-duration:1s;
+    -moz-animation-fill-mode:forwards;
+
+    -ms-animation-name:go-home;
+    -ms-animation-duration:1s;
+    -ms-animation-fill-mode:forwards;
+
+    -o-animation-name:go-home;
+    -o-animation-duration:1s;
+    -o-animation-fill-mode:forwards;
+
     animation-name:go-home;
     animation-duration:1s;
     animation-fill-mode:forwards;
 }
 
 .leave-home-animat{
+    -webkit-animation-name:go-home;
+    -webkit-animation-duration:1s;
+    -webkit-animation-direction:reverse;
+    -webkit-animation-fill-mode:forwards;
+
+    -moz-animation-name:go-home;
+    -moz-animation-duration:1s;
+    -moz-animation-direction:reverse;
+    -moz-animation-fill-mode:forwards;
+
+    -ms-animation-name:go-home;
+    -ms-animation-duration:1s;
+    -ms-animation-direction:reverse;
+    -ms-animation-fill-mode:forwards;
+
+    -o-animation-name:go-home;
+    -o-animation-duration:1s;
+    -o-animation-direction:reverse;
+    -o-animation-fill-mode:forwards;
+
     animation-name:go-home;
     animation-duration:1s;
     animation-direction:reverse;
@@ -139,10 +180,34 @@ body {
     }
 }
 
+/*Animation*/
+@-webkit-keyframes go-home {
+    0% {margin-left :0vw;}
+  20% {margin-left:-70vw;}
+  80% {margin-left:-60vw;}
+  100% {margin-left:-150vw;}
+}
+
+@-moz-keyframes go-home {
+    0% {margin-left :0vw;}
+  20% {margin-left:-70vw;}
+  80% {margin-left:-60vw;}
+  100% {margin-left:-150vw;}
+}
+
+@-o-keyframes go-home {
+    0% {margin-left :0vw;}
+  20% {margin-left:-70vw;}
+  80% {margin-left:-60vw;}
+  100% {margin-left:-150vw;}
+}
 
 @keyframes go-home {
-    0% { margin-left :0;}
-  20% { margin-left:-70vw;}
-  80% { margin-left:-60vw;}
-  100% {margin-left:-150vmax;}
+    0% {margin-left:0vw;}/*經測試0改0vw使IE 特效更平滑*/
+  20% {margin-left:-70vw;}
+  80% {margin-left:-60vw;}
+  100% {margin-left:-150vw;}
+  /*100% {margin-left:calc(-150 * (1vw + 1vh - 1vmin));}
+  經測試IE在這裡用calc無效，但其他地方可以使用!
+  邏輯上，因為.home-view-head::after寬度設成了150vmax(實際home-view寬度為home-view-head(100vh)加上.home-view-head::after的寬度)，所以也不會破圖 */
 }
