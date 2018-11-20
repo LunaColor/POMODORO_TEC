@@ -1,8 +1,17 @@
 body {
     align-items: center;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     min-height: 97vh;
+    height: 97vh;
+    /*only for IE!
+    In IE 10-11, min-height declarations on flex containers work to size the containers themselves,
+    but their flex item children do not seem to know the size of their parents. They act as if no height has been set at all.
+    SO:
+    Use height instead of min-height or
+    if min-height is required,
+    add a wrapper element around the flex container that is itself a flex container with flex-direction: column.*/
     min-width:200px;
 }
 
@@ -13,6 +22,7 @@ body {
     flex-direction: row;
     width: 90%;
     max-width: 900px;
+    min-height: 330px;
     justify-content: center;
 }
 
@@ -32,7 +42,6 @@ body {
     width: 100px;
     height: 100px;
     /* background-color: chartreuse;*/
-    margin-top: 200px;
 }
 
 .set-up-content{
@@ -145,6 +154,9 @@ body {
 }
 /*S*/
 @media (max-width:769px) {
+    body{
+        display: block;
+    }
     .balls {
         flex-direction: column;
     }
@@ -158,16 +170,15 @@ body {
     }
 
     .ball-now {
-        width: 70vw;
-        height: 70vw;
+        width: 70vmin;
+        height: 70vmin;
         min-width: 140px;
         min-height: 140px;
     }
 
     .ball-wait {
-        width: 35vw;
-        height: 35vw;
-        margin-top: 0px;
+        width: 35vmin;
+        height: 35vmin;
         min-width: 70px;
         min-height: 70px;
     }
