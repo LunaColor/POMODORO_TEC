@@ -122,45 +122,62 @@
                 return 'rgb(153, 242, 255)'
             }
         }
+        /*離開主頁(離開設定頁)*/
         function homePageLeaave() {
             if ($('#homeView').hasClass('leave-home-animat')) {
                 $('#homePage').hide();
                 $('#homeView').removeClass('leave-home-animat');
+                $('#homePageGoBtn').show();
+                //disabled close----
+                $('#disabledControl').hide();
                 return
             }
-            $('#homePageLeaaveBtn').fadeOut(500);
-            $('#homeView').removeClass('init-home-view');
-            $('#homeView').addClass('home-view');
-            $('#homeView').addClass('leave-home-animat');
+            //disabled first----
+            $('#disabledControl').show();
+            //------
+            $('#inputBlock').hide();
+            $('#homeView').removeClass('init-home-view').addClass('home-view leave-home-animat');
             setTimeout(homePageLeaave, 1000);
         }
 
+        /*回到主頁(設定頁)*/
         function homePageGo() {
             $('#homePage').show();
             if ($('#homeView').hasClass('go-home-animat')) {
-                $('#homePageLeaaveBtn').fadeIn(1000);
-                $('#homeView').removeClass('go-home-animat');
-                $('#homeView').removeClass('home-view');
-                $('#homeView').addClass('init-home-view');
+                $('#homeView').removeClass('home-view go-home-animat').addClass('init-home-view');
+                $('#inputBlock').show();
+                //disabled close----
+                $('#disabledControl').hide();
                 return
             }
+            //disabled first----
+            $('#disabledControl').show();
+            //------
+            clearTimeout(workPlaying);
+            clearTimeout(restPlaying);
+            setUpVue.currentfuncButton = 1;
+            $('#homePageGoBtn').hide();
             $('#homeView').addClass('go-home-animat');
             setTimeout(homePageGo, 1000);
+        }
+
+        function functionButtonCheck() {
+            if ($('#homeView').hasClass('init-home-view')) {
+                homePageLeaave();
+            }
         }
     </script>
 </head>
 
-<body>
+<body style="background-image: url('src/img/bg_main.jpg')">
+    <div id="disabledControl" style="display:none;"></div>
+    <!--用來控制全頁disabled-->
     <div id="homePage" class="home-page">
         <div id="homeView" class="init-home-view">
             <div class="home-view-head">
             </div>
         </div>
-        <button id="homePageLeaaveBtn" style="position: fixed;top: 0;left: 0;" onclick="homePageLeaave()">離開設定</button>
     </div>
-
-    <button id="homePageGoBtn" style="position: fixed;top: 50;left: 50;" onclick="homePageGo()">回設定</button>
-
 
     <div class="balls">
         <div>
@@ -202,19 +219,21 @@
     </script>
     <div class="set-up-page">
         <div id="setUp" class="set-up-content">
-            <div class="input-block">
+            <div id="inputBlock" class="input-block">
                 <div class="input-time">
                     <label for="workTimeInput">WORK TIME</label>
-                    <input id="workTimeInput" v-model='workTimeMin'>
+                    <input id="workTimeInput" maxlength="3" v-model='workTimeMin'>
                 </div>
                 <div class="input-time">
                     <label for="restTimeInput">REST TIME</label>
-                    <input id="restTimeInput" v-model='restTimeMin'>
+                    <input id="restTimeInput" maxlength="3" v-model='restTimeMin'>
                 </div>
             </div>
             <!-- <button>RESET</button>-->
-            <button v-for="tab in funcButtons" v-show='tab.id==currentfuncButton' v-bind:key="tab.id" v-on:click='functionButtonClick(tab.id)'>{{
+            <button v-for="tab in funcButtons" v-show='tab.id==currentfuncButton' v-bind:key="tab.id" v-on:click='functionButtonClick(tab.id)'
+                onclick="functionButtonCheck()">{{
                 tab.text }}</button>
+            <button id="homePageGoBtn" style="display:none;" onclick="homePageGo()">BACK</button>
 
         </div>
     </div>
