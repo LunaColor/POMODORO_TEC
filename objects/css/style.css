@@ -231,6 +231,13 @@ body {
     animation-fill-mode:forwards;
 }
 /*----------------*/
+/*for jQuery dialog*/
+.ui-dialog-titlebar-close {
+    visibility: hidden;
+}
+
+/*----------------*/
+
 #disabledControl{
     position: fixed;
     top: 0;

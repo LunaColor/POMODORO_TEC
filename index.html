@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,7 +39,6 @@
                 workTimeLast -= 1000;
             }
         }
-
         function workEnd() {
             console.log("WORK_END:" + new Date());
             setUpVue.currentfuncButton = 4;
@@ -46,7 +46,6 @@
             mainBallVue.ballText = 'FINISH!'
             secondBallVue.waveTop = 0;
         }
-
         function restPlay() {
             if (restTimeLast == null || isNaN(restTimeLast) || restTimeLast <= 0) {
                 //倒數完成
@@ -67,25 +66,6 @@
             mainBallVue.waveTop = 1;
             mainBallVue.ballText = 'FINISH!'
             secondBallVue.waveTop = 0;
-        }
-
-        function getTimeStr(microsec) {
-            var hr = Math.floor(microsec / (60 * 60 * 1000))
-            var min = Math.floor((microsec % (60 * 60 * 1000)) / (60 * 1000));
-            var sec = Math.floor((microsec % (60 * 1000)) / 1000)
-            return paddingLeft('0', String(hr), 2) + ':' + paddingLeft('0', String(min), 2) + ':' + paddingLeft('0', String(sec), 2);
-        }
-
-        function paddingLeft(insert, str, length) {
-            if (str.length >= length) {
-                return str;
-            }
-            if (insert.length + str.length > length) {
-                return str;
-            }
-            else {
-                return paddingLeft(insert, insert + str, length);
-            }
         }
 
         function getWorkBallColor(waveTop) {
@@ -165,12 +145,31 @@
             setTimeout(homePageGo, 1000);
         }
 
+        /*如果在主頁按開始工作，防呆後要進入計時畫面。*/
         function functionButtonCheck() {
             if ($('#homeView').hasClass('init-home-view')) {
                 if (!checkIsPosNumber(setUpVue.workTimeMin) || !checkIsPosNumber(setUpVue.restTimeMin)) {
                     return;
                 }
                 homePageLeaave();
+            }
+        }
+
+        function getTimeStr(microsec) {
+            var hr = Math.floor(microsec / (60 * 60 * 1000))
+            var min = Math.floor((microsec % (60 * 60 * 1000)) / (60 * 1000));
+            var sec = Math.floor((microsec % (60 * 1000)) / 1000)
+            return paddingLeft('0', String(hr), 2) + ':' + paddingLeft('0', String(min), 2) + ':' + paddingLeft('0', String(sec), 2);
+        }
+        function paddingLeft(insert, str, length) {
+            if (str.length >= length) {
+                return str;
+            }
+            if (insert.length + str.length > length) {
+                return str;
+            }
+            else {
+                return paddingLeft(insert, insert + str, length);
             }
         }
         function checkIsPosNumber(obj) {
@@ -186,24 +185,59 @@
             return true;
         }
     </script>
-    <script>
+    <script>/*Dialog*/
         $(function () {
             $("#infoDialog").dialog({
                 autoOpen: false,
                 resizable: false,
-                draggable:false,
+                draggable: false,
+                title: "Your time setting",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                },
                 show: {
                     effect: "explode",
-                    duration: 300
+                    duration: 200
                 },
                 hide: {
                     effect: "explode",
-                    duration: 300
+                    duration: 200
                 }
             });
             $("#infoBtn").on("click", function () {
                 $("#infoDialog").html('Work time : ' + setUpVue.workTimeMin + ' minutes!<br/>Rest time : ' + setUpVue.restTimeMin + ' minutes!');
                 $("#infoDialog").dialog("open");
+            });
+        });
+        $(function () {
+            $("#goHomeConfirmDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                modal: true,
+                title: "Back to homepage?",
+                buttons: {
+                    "Yes": function () {
+                        homePageGo();
+                        $(this).dialog("close");
+                    },
+                    Cancel: function () {
+                        $(this).dialog("close");
+                    }
+                },
+                show: {
+                    effect: "explode",
+                    duration: 200
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 200
+                }
+            });
+            $("#homePageGoBtn").on("click", function () {
+                $("#goHomeConfirmDialog").dialog("open");
             });
         });
     </script>
@@ -219,6 +253,7 @@
             </div>
         </div>
     </div>
+    <!--計時球-->
     <div class="balls">
         <div>
             <div id="mainTomatoBall" class="ball ball-now">
@@ -257,6 +292,7 @@
             }
         })
     </script>
+    <!--設定頁-->
     <div id="setUpPage" class="set-up-page home-add-set-up-page">
         <div id="setUp" class="set-up-content">
             <div id="homePageInf">
@@ -282,7 +318,7 @@
                 tab.text }}</button>
             <div id="tomatoPageBtns" style="display:none;">
                 <button id="infoBtn">INFO</button>
-                <button id="homePageGoBtn" onclick="homePageGo()">BACK</button>
+                <button id="homePageGoBtn">BACK</button>
             </div>
         </div>
     </div>
@@ -369,6 +405,9 @@
         })
     </script>
     <!--Dialog-->
-    <div id="infoDialog" title="Your time setting">your time set</div>
+    <div id="infoDialog"></div>
+    <div id="goHomeConfirmDialog">Back to homepage will stop your timing now!<br />And you can set new working or
+        resting time!</div>
 </body>
+
 </html>
