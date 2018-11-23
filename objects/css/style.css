@@ -1,10 +1,20 @@
 body {
-    align-items: center;
     display: flex;
+    align-items: center;
     justify-content: center;
+    flex-direction: column;
     min-height: 97vh;
+    height: 97vh;
+    /*only for IE!
+    In IE 10-11, min-height declarations on flex containers work to size the containers themselves,
+    but their flex item children do not seem to know the size of their parents. They act as if no height has been set at all.
+    SO:
+    Use height instead of min-height or
+    if min-height is required,
+    add a wrapper element around the flex container that is itself a flex container with flex-direction: column.*/
+    min-width:200px;
 }
-
+/*----------------*/
 .balls {
    /* background-color: blueviolet;*/
     display: flex;
@@ -12,7 +22,8 @@ body {
     flex-direction: row;
     width: 90%;
     max-width: 900px;
-    justify-content: center
+    min-height: 330px;
+    justify-content: center;
 }
 
 .ball {
@@ -31,21 +42,242 @@ body {
     width: 100px;
     height: 100px;
     /* background-color: chartreuse;*/
-    margin-top: 200px;
+}
+/*----------------*/
+.set-up-page{
+    z-index: 999; 
+    position: fixed;
 }
 
-.set-up-content{
+.home-add-set-up-page{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color:rgba(230, 230, 180,0.9);
+}
+
+.tomato-add-set-up-page{
+    bottom: 1px;
+    right: 1px;
+}
+
+.home-add-set-up-page .set-up-content{
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
+    padding: 10px;
+    font-size: 40px;
+}
+
+.tomato-add-set-up-page .set-up-content{
+    display: flex;
+    justify-content: right;
+    flex-direction: row;
+    padding: 10px;
+    font-size: 40px;
+}
+
+.set-up-content button{
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    font-size: 0.5em;
+    box-shadow: 0px 1.5px 1.5px #333333;
+    color: #FFDDDD;
+    text-shadow:0px 1px  #333333;
+    background-color: tomato;
+}
+
+.set-up-content button:hover{
+    transform: scale(1.1);
+    box-shadow: 0px 2px 2px #333333;
+}
+
+.set-up-content button:active{
+    transform: scale(0.8);
 }
 
 .input-block{
     display: flex;
     flex-direction: row;
+}
 
+.input-block .input-time{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 20px 20px 20px;
+    color: tomato;
+    text-shadow: 0px 1px 1px #333333;
+    font-size: 1em;
+}
+
+.input-block .input-time input{
+    border: none;
+    outline: none;
+    caret-color: tomato;
+    text-align: center;
+    color: tomato;
+    padding: 5px 0;
+    font-size: 0.7em;
+    text-shadow:0 1px #333333;
+    max-width: 10em;
+}
+
+.input-time span{
+    text-shadow: none;
+    font-size: 15px;
+    color: red;
+}
+/*----------------*/
+.home-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    min-width: 100vw;
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0,0.3);
+    overflow: hidden;
+}
+
+.init-home-view{
+    display: flex;
+    flex-direction: row;
+    transform: translate(-100vh, 0);
+    /*滿屏transform: translate(-100vh, 0);*/
+    /*退出transform: translate(100vw, 0);*/
+ }
+ 
+.home-view{
+   display: flex;
+   flex-direction: row;
+   -webkit-transform: translate(100vw, 0);
+   -moz-transform: translate(100vw, 0);
+   -ms-transform: translate(100vw, 0);
+   -o-transform: translate(100vw, 0);
+   transform: translate(100vw, 0);
+   /*滿屏transform: translate(-100vh, 0);*/
+   /*退出transform: translate(100vw, 0);*/
+}
+
+.home-view-head {
+    border-radius: 50% 0 0 50%;
+    height: 100vh;
+    width: 100vh;
+    background-color:  rgba(240, 150, 80,1);
+}
+.home-view-head::after
+{
+    position: absolute;
+    content:'';
+    top: 0;
+    left: 100vh;
+    height: 100vh;
+    /*width: 150vmax;*//*IE 不支援vmax*/
+    width: calc(150 * (1vw + 1vh - 1vmin));
+    background-color:  rgba(240, 150, 80,1);
+}
+/*----------------*/
+.go-home-animat{
+    -webkit-animation-name:go-home;
+    -webkit-animation-duration:1s;
+    -webkit-animation-fill-mode:forwards;
+
+    -moz-animation-name:go-home;
+    -moz-animation-duration:1s;
+    -moz-animation-fill-mode:forwards;
+
+    -ms-animation-name:go-home;
+    -ms-animation-duration:1s;
+    -ms-animation-fill-mode:forwards;
+
+    -o-animation-name:go-home;
+    -o-animation-duration:1s;
+    -o-animation-fill-mode:forwards;
+
+    animation-name:go-home;
+    animation-duration:1s;
+    animation-fill-mode:forwards;
+}
+
+.leave-home-animat{
+    -webkit-animation-name:go-home;
+    -webkit-animation-duration:1s;
+    -webkit-animation-direction:reverse;
+    -webkit-animation-fill-mode:forwards;
+
+    -moz-animation-name:go-home;
+    -moz-animation-duration:1s;
+    -moz-animation-direction:reverse;
+    -moz-animation-fill-mode:forwards;
+
+    -ms-animation-name:go-home;
+    -ms-animation-duration:1s;
+    -ms-animation-direction:reverse;
+    -ms-animation-fill-mode:forwards;
+
+    -o-animation-name:go-home;
+    -o-animation-duration:1s;
+    -o-animation-direction:reverse;
+    -o-animation-fill-mode:forwards;
+
+    animation-name:go-home;
+    animation-duration:1s;
+    animation-direction:reverse;
+    animation-fill-mode:forwards;
+}
+/*----------------*/
+/*for jQuery dialog*/
+.ui-dialog-titlebar-close {
+    visibility: hidden;
+}
+
+/*----------------*/
+
+#disabledControl{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 9999;
+}
+
+#homePageInf{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#homePageInf p{
+    font-size: 30px
+}
+
+#homePageInf a{
+    font-size: 20px;
+    color: saddlebrown
+}
+
+#tomatoPageBtns{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#tomatoPageBtns button{
+    background-color: darkcyan;
 }
 /*S*/
 @media (max-width:769px) {
+    body{
+        display: block;
+    }
     .balls {
         flex-direction: column;
     }
@@ -59,13 +291,71 @@ body {
     }
 
     .ball-now {
-        width: 70vw;
-        height: 70vw;
+        width: 70vmin;
+        height: 70vmin;
+        min-width: 140px;
+        min-height: 140px;
     }
 
     .ball-wait {
-        width: 35vw;
-        height: 35vw;
-        margin-top: 0px;
+        width: 35vmin;
+        height: 35vmin;
+        min-width: 70px;
+        min-height: 70px;
     }
+
+    #setUp{
+        font-size: 30px;
+    }
+
+    #subTitle{
+        display: none;
+    }
+}
+/*SS*/
+@media (max-width:300px) {
+    #mainTomatoBall{
+        font-size: 30px;
+    }
+
+    #setUp{
+        font-size: 20px;
+    }
+
+    .set-up-content button{
+        padding: 3px;
+        margin: 2px;
+    }
+}
+
+/*Animation*/
+@-webkit-keyframes go-home {
+    0% {margin-left :0vw;}
+  20% {margin-left:-70vw;}
+  80% {margin-left:-60vw;}
+  100% {margin-left:-150vw;}
+}
+
+@-moz-keyframes go-home {
+    0% {margin-left :0vw;}
+  20% {margin-left:-70vw;}
+  80% {margin-left:-60vw;}
+  100% {margin-left:-150vw;}
+}
+
+@-o-keyframes go-home {
+    0% {margin-left :0vw;}
+  20% {margin-left:-70vw;}
+  80% {margin-left:-60vw;}
+  100% {margin-left:-150vw;}
+}
+
+@keyframes go-home {
+    0% {margin-left:0vw;}/*經測試0改0vw使IE 特效更平滑*/
+  20% {margin-left:-70vw;}
+  80% {margin-left:-60vw;}
+  100% {margin-left:-150vw;}
+  /*100% {margin-left:calc(-150 * (1vw + 1vh - 1vmin));}
+  經測試IE在這裡用calc無效，但其他地方可以使用!
+  邏輯上，因為.home-view-head::after寬度設成了150vmax(實際home-view寬度為home-view-head(100vh)加上.home-view-head::after的寬度)，所以也不會破圖 */
 }

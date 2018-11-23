@@ -7,10 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>小番茄</title>
 
-    <link href="objects/css/style.css" rel="stylesheet" type="text/css">
-    <link href="objects/component/ball-wave/ball-wave.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="objects/css/style.css">
+    <link rel="stylesheet" href="objects/component/ball-wave/ball-wave.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="objects/component/ball-wave/ball-wave.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
         //work
@@ -36,7 +39,6 @@
                 workTimeLast -= 1000;
             }
         }
-
         function workEnd() {
             console.log("WORK_END:" + new Date());
             setUpVue.currentfuncButton = 4;
@@ -44,13 +46,11 @@
             mainBallVue.ballText = 'FINISH!'
             secondBallVue.waveTop = 0;
         }
-
         function restPlay() {
             if (restTimeLast == null || isNaN(restTimeLast) || restTimeLast <= 0) {
                 //倒數完成
                 restEnd();
             } else {
-                console.log((restTimeLast / 1000) + " sec...");
                 mainBallVue.ballText = getTimeStr(restTimeLast);
                 mainBallVue.waveTop = 1 - (restTimeLast / restTime);
                 mainBallVue.ballColor = getRestBallColor(mainBallVue.waveTop);
@@ -66,25 +66,6 @@
             mainBallVue.waveTop = 1;
             mainBallVue.ballText = 'FINISH!'
             secondBallVue.waveTop = 0;
-        }
-
-        function getTimeStr(microsec) {
-            var hr = Math.floor(microsec / (60 * 60 * 1000))
-            var min = Math.floor((microsec % (60 * 60 * 1000)) / (60 * 1000));
-            var sec = Math.floor((microsec % (60 * 1000)) / 1000)
-            return paddingLeft('0', String(hr), 2) + ':' + paddingLeft('0', String(min), 2) + ':' + paddingLeft('0', String(sec), 2);
-        }
-
-        function paddingLeft(insert, str, length) {
-            if (str.length >= length) {
-                return str;
-            }
-            if (insert.length + str.length > length) {
-                return str;
-            }
-            else {
-                return paddingLeft(insert, insert + str, length);
-            }
         }
 
         function getWorkBallColor(waveTop) {
@@ -121,10 +102,158 @@
                 return 'rgb(153, 242, 255)'
             }
         }
+        /*離開主頁(離開設定頁)*/
+        function homePageLeaave() {
+            if ($('#homeView').hasClass('leave-home-animat')) {
+                $('#homePage').hide();
+                $('#homeView').removeClass('leave-home-animat');
+                $('#setUpPage').removeClass('home-add-set-up-page').addClass('tomato-add-set-up-page').fadeIn(200);
+                $('#tomatoPageBtns').show();
+                //disabled close----
+                $('#disabledControl').hide();
+                return
+            }
+            //disabled first----
+            $('#disabledControl').show();
+            //------
+            $('#homePageInf').hide();
+            $('#homeView').removeClass('init-home-view').addClass('home-view leave-home-animat');
+            $('#setUpPage').fadeOut(200);
+            setTimeout(homePageLeaave, 1000);
+        }
+
+        /*回到主頁(設定頁)*/
+        function homePageGo() {
+            $('#homePage').show();
+            if ($('#homeView').hasClass('go-home-animat')) {
+                $('#homeView').removeClass('home-view go-home-animat').addClass('init-home-view');
+                $('#setUpPage').removeClass('tomato-add-set-up-page').addClass('home-add-set-up-page').fadeIn(200);
+                $('#homePageInf').show();
+                //disabled close----
+                $('#disabledControl').hide();
+                return
+            }
+            //disabled first----
+            $('#disabledControl').show();
+            //------
+            clearTimeout(workPlaying);
+            clearTimeout(restPlaying);
+            setUpVue.currentfuncButton = 1;
+            $('#tomatoPageBtns').hide();
+            $('#homeView').addClass('go-home-animat');
+            $('#setUpPage').fadeOut(200);
+            setTimeout(homePageGo, 1000);
+        }
+
+        /*如果在主頁按開始工作，防呆後要進入計時畫面。*/
+        function functionButtonCheck() {
+            if ($('#homeView').hasClass('init-home-view')) {
+                if (!checkIsPosNumber(setUpVue.workTimeMin) || !checkIsPosNumber(setUpVue.restTimeMin)) {
+                    return;
+                }
+                homePageLeaave();
+            }
+        }
+
+        function getTimeStr(microsec) {
+            var hr = Math.floor(microsec / (60 * 60 * 1000))
+            var min = Math.floor((microsec % (60 * 60 * 1000)) / (60 * 1000));
+            var sec = Math.floor((microsec % (60 * 1000)) / 1000)
+            return paddingLeft('0', String(hr), 2) + ':' + paddingLeft('0', String(min), 2) + ':' + paddingLeft('0', String(sec), 2);
+        }
+        function paddingLeft(insert, str, length) {
+            if (str.length >= length) {
+                return str;
+            }
+            if (insert.length + str.length > length) {
+                return str;
+            }
+            else {
+                return paddingLeft(insert, insert + str, length);
+            }
+        }
+        function checkIsPosNumber(obj) {
+            if (!obj || $.trim(obj) == "") {
+                return false;
+            }
+            if (isNaN(obj)) {
+                return false;
+            }
+            if (obj <= 0) {
+                return false;
+            }
+            return true;
+        }
     </script>
+    <script>/*Dialog*/
+        $(function () {
+            $("#infoDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                title: "Your time setting",
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                    }
+                },
+                show: {
+                    effect: "explode",
+                    duration: 200
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 200
+                }
+            });
+            $("#infoBtn").on("click", function () {
+                $("#infoDialog").html('Work time : ' + setUpVue.workTimeMin + ' minutes!<br/>Rest time : ' + setUpVue.restTimeMin + ' minutes!');
+                $("#infoDialog").dialog("open");
+            });
+        });
+        $(function () {
+            $("#goHomeConfirmDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable: false,
+                modal: true,
+                title: "Back to homepage?",
+                buttons: {
+                    "Yes": function () {
+                        homePageGo();
+                        $(this).dialog("close");
+                    },
+                    Cancel: function () {
+                        $(this).dialog("close");
+                    }
+                },
+                show: {
+                    effect: "explode",
+                    duration: 200
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 200
+                }
+            });
+            $("#homePageGoBtn").on("click", function () {
+                $("#goHomeConfirmDialog").dialog("open");
+            });
+        });
+    </script>
+    <noscript>Your browser does not support JavaScript!</noscript>
 </head>
 
-<body>
+<body style="background-image: url('src/img/bg_main.jpg')">
+    <div id="disabledControl" style="display:none;"></div>
+    <!--用來控制全頁disabled-->
+    <div id="homePage" class="home-page">
+        <div id="homeView" class="init-home-view">
+            <div class="home-view-head">
+            </div>
+        </div>
+    </div>
+    <!--計時球-->
     <div class="balls">
         <div>
             <div id="mainTomatoBall" class="ball ball-now">
@@ -163,22 +292,34 @@
             }
         })
     </script>
-    <div class="set-up-page">
+    <!--設定頁-->
+    <div id="setUpPage" class="set-up-page home-add-set-up-page">
         <div id="setUp" class="set-up-content">
-            <div class="input-block">
-                <div class="input-time">
-                    <label for="workTimeInput">WORK TIME</label>
-                    <input id="workTimeInput" v-model='workTimeMin'>
-                </div>
-                <div class="input-time">
-                    <label for="restTimeInput">REST TIME</label>
-                    <input id="restTimeInput" v-model='restTimeMin'>
+            <div id="homePageInf">
+                <img id="logo" src="src/img/logo_tomato.png" height="128" width="128">
+                <a>Pomodoro Technique</a>
+                <a id="subTitle">The only way to do great work is to love what you do.</a>
+                <div id="inputBlock" class="input-block">
+                    <div class="input-time">
+                        <label for="workTimeInput">WORK TIME</label>
+                        <input id="workTimeInput" maxlength="3" v-model='workTimeMin'>
+                        <span v-show='workTimeCheck'>Must be positive number</span>
+                    </div>
+                    <div class="input-time">
+                        <label for="restTimeInput">REST TIME</label>
+                        <input id="restTimeInput" maxlength="3" v-model='restTimeMin'>
+                        <span v-show='restTimeCheck'>Must be positive number</span>
+                    </div>
                 </div>
             </div>
             <!-- <button>RESET</button>-->
-            <button v-for="tab in funcButtons" v-show='tab.id==currentfuncButton' v-bind:key="tab.id" v-on:click='functionButtonClick(tab.id)'>{{
+            <button v-for="tab in funcButtons" v-show='tab.id==currentfuncButton' v-bind:key="tab.id" v-on:click='functionButtonClick(tab.id)'
+                onclick="functionButtonCheck()">{{
                 tab.text }}</button>
-
+            <div id="tomatoPageBtns" style="display:none;">
+                <button id="infoBtn">INFO</button>
+                <button id="homePageGoBtn">BACK</button>
+            </div>
         </div>
     </div>
     <script>
@@ -197,8 +338,19 @@
                     { id: 6, text: 'KEEP RESTING', note: 'as restPause' },
                 ]
             },
+            computed: {
+                workTimeCheck: function () {
+                    return !checkIsPosNumber(this.workTimeMin)
+                },
+                restTimeCheck: function () {
+                    return !checkIsPosNumber(this.restTimeMin)
+                }
+            },
             methods: {
                 functionButtonClick: function (id) {
+                    if (!checkIsPosNumber(setUpVue.workTimeMin) || !checkIsPosNumber(setUpVue.restTimeMin)) {
+                        return;
+                    }
                     switch (id) {
                         case 1: this.workStart(); break;
                         case 2: this.workPause(); break;
@@ -252,5 +404,10 @@
             }
         })
     </script>
+    <!--Dialog-->
+    <div id="infoDialog"></div>
+    <div id="goHomeConfirmDialog">Back to homepage will stop your timing now!<br />And you can set new working or
+        resting time!</div>
 </body>
+
 </html>
