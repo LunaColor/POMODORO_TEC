@@ -1,8 +1,8 @@
 body {
-    align-items: center;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    flex-direction: column;
     min-height: 97vh;
     height: 97vh;
     /*only for IE!
@@ -14,7 +14,7 @@ body {
     add a wrapper element around the flex container that is itself a flex container with flex-direction: column.*/
     min-width:200px;
 }
-
+/*----------------*/
 .balls {
    /* background-color: blueviolet;*/
     display: flex;
@@ -43,19 +43,37 @@ body {
     height: 100px;
     /* background-color: chartreuse;*/
 }
+/*----------------*/
 .set-up-page{
     z-index: 999; 
     position: fixed;
+}
+
+.home-add-set-up-page{
     top: 50%;
     left: 50%;
+    transform: translate(-50%,-50%);
+    background-color:rgba(230, 230, 180,0.9);
 }
-.set-up-content{
+
+.tomato-add-set-up-page{
+    bottom: 1px;
+    right: 1px;
+}
+
+.home-add-set-up-page .set-up-content{
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    transform: translate(-50%,-50%);
-    background-color:rgba(230, 230, 180,0.9);
+    padding: 10px;
+    font-size: 40px;
+}
+
+.tomato-add-set-up-page .set-up-content{
+    display: flex;
+    justify-content: right;
+    flex-direction: row;
     padding: 10px;
     font-size: 40px;
 }
@@ -64,6 +82,7 @@ body {
     border: none;
     border-radius: 5px;
     padding: 5px;
+    margin: 5px;
     font-size: 0.5em;
     box-shadow: 0px 1.5px 1.5px #333333;
     color: #FFDDDD;
@@ -85,7 +104,7 @@ body {
     flex-direction: row;
 }
 
-.input-time{
+.input-block .input-time{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -96,7 +115,7 @@ body {
     font-size: 1em;
 }
 
-.input-time input{
+.input-block .input-time input{
     border: none;
     outline: none;
     caret-color: tomato;
@@ -107,7 +126,7 @@ body {
     text-shadow:0 1px #333333;
     max-width: 10em;
 }
-
+/*----------------*/
 .home-page {
     position: fixed;
     top: 0;
@@ -156,7 +175,7 @@ body {
     width: calc(150 * (1vw + 1vh - 1vmin));
     background-color:  rgba(240, 150, 80,1);
 }
-
+/*----------------*/
 .go-home-animat{
     -webkit-animation-name:go-home;
     -webkit-animation-duration:1s;
@@ -205,7 +224,7 @@ body {
     animation-direction:reverse;
     animation-fill-mode:forwards;
 }
-
+/*----------------*/
 #disabledControl{
     position: fixed;
     top: 0;
@@ -213,6 +232,33 @@ body {
     height: 100vh;
     width: 100vw;
     z-index: 9999;
+}
+
+#homePageInf{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#homePageInf p{
+    font-size: 30px
+}
+
+#homePageInf a{
+    font-size: 20px;
+    color: saddlebrown
+}
+
+#tomatoPageBtns{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#tomatoPageBtns button{
+    background-color: darkcyan;
 }
 /*S*/
 @media (max-width:769px) {
@@ -245,8 +291,12 @@ body {
         min-height: 70px;
     }
 
-    .set-up-content{
-    font-size: 30px;
+    #setUp{
+        font-size: 30px;
+    }
+
+    #subTitle{
+        display: none;
     }
 }
 /*SS*/
@@ -255,7 +305,7 @@ body {
         font-size: 30px;
     }
 
-    .set-up-content{
+    #setUp{
         font-size: 20px;
     }
 }

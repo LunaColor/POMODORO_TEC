@@ -51,7 +51,6 @@
                 //倒數完成
                 restEnd();
             } else {
-                console.log((restTimeLast / 1000) + " sec...");
                 mainBallVue.ballText = getTimeStr(restTimeLast);
                 mainBallVue.waveTop = 1 - (restTimeLast / restTime);
                 mainBallVue.ballColor = getRestBallColor(mainBallVue.waveTop);
@@ -127,7 +126,8 @@
             if ($('#homeView').hasClass('leave-home-animat')) {
                 $('#homePage').hide();
                 $('#homeView').removeClass('leave-home-animat');
-                $('#homePageGoBtn').show();
+                $('#setUpPage').removeClass('home-add-set-up-page').addClass('tomato-add-set-up-page').fadeIn(200);
+                $('#tomatoPageBtns').show();
                 //disabled close----
                 $('#disabledControl').hide();
                 return
@@ -135,8 +135,9 @@
             //disabled first----
             $('#disabledControl').show();
             //------
-            $('#inputBlock').hide();
+            $('#homePageInf').hide();
             $('#homeView').removeClass('init-home-view').addClass('home-view leave-home-animat');
+            $('#setUpPage').fadeOut(200);
             setTimeout(homePageLeaave, 1000);
         }
 
@@ -145,7 +146,8 @@
             $('#homePage').show();
             if ($('#homeView').hasClass('go-home-animat')) {
                 $('#homeView').removeClass('home-view go-home-animat').addClass('init-home-view');
-                $('#inputBlock').show();
+                $('#setUpPage').removeClass('tomato-add-set-up-page').addClass('home-add-set-up-page').fadeIn(200);
+                $('#homePageInf').show();
                 //disabled close----
                 $('#disabledControl').hide();
                 return
@@ -156,8 +158,9 @@
             clearTimeout(workPlaying);
             clearTimeout(restPlaying);
             setUpVue.currentfuncButton = 1;
-            $('#homePageGoBtn').hide();
+            $('#tomatoPageBtns').hide();
             $('#homeView').addClass('go-home-animat');
+            $('#setUpPage').fadeOut(200);
             setTimeout(homePageGo, 1000);
         }
 
@@ -217,24 +220,31 @@
             }
         })
     </script>
-    <div class="set-up-page">
+    <div id="setUpPage" class="set-up-page home-add-set-up-page">
         <div id="setUp" class="set-up-content">
-            <div id="inputBlock" class="input-block">
-                <div class="input-time">
-                    <label for="workTimeInput">WORK TIME</label>
-                    <input id="workTimeInput" maxlength="3" v-model='workTimeMin'>
-                </div>
-                <div class="input-time">
-                    <label for="restTimeInput">REST TIME</label>
-                    <input id="restTimeInput" maxlength="3" v-model='restTimeMin'>
+            <div id="homePageInf">
+                <img id="logo" src="src/img/logo_tomato.png" height="128" width="128">
+                <a>Pomodoro Technique</a>
+                <a id="subTitle">The only way to do great work is to love what you do.</a>
+                <div id="inputBlock" class="input-block">
+                    <div class="input-time">
+                        <label for="workTimeInput">WORK TIME</label>
+                        <input id="workTimeInput" maxlength="3" v-model='workTimeMin'>
+                    </div>
+                    <div class="input-time">
+                        <label for="restTimeInput">REST TIME</label>
+                        <input id="restTimeInput" maxlength="3" v-model='restTimeMin'>
+                    </div>
                 </div>
             </div>
             <!-- <button>RESET</button>-->
             <button v-for="tab in funcButtons" v-show='tab.id==currentfuncButton' v-bind:key="tab.id" v-on:click='functionButtonClick(tab.id)'
                 onclick="functionButtonCheck()">{{
                 tab.text }}</button>
-            <button id="homePageGoBtn" style="display:none;" onclick="homePageGo()">BACK</button>
-
+            <div id="tomatoPageBtns" style="display:none;">
+                <button onclick="homePageGo()">INFO</button>
+                <button id="homePageGoBtn" onclick="homePageGo()">BACK</button>
+            </div>
         </div>
     </div>
     <script>
