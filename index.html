@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>小番茄</title>
 
-    <link href="objects/css/style.css" rel="stylesheet" type="text/css">
-    <link href="objects/component/ball-wave/ball-wave.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="objects/css/style.css">
+    <link rel="stylesheet" href="objects/component/ball-wave/ball-wave.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="objects/component/ball-wave/ball-wave.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
         //work
@@ -185,6 +186,28 @@
             return true;
         }
     </script>
+    <script>
+        $(function () {
+            $("#infoDialog").dialog({
+                autoOpen: false,
+                resizable: false,
+                draggable:false,
+                show: {
+                    effect: "explode",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                }
+            });
+            $("#infoBtn").on("click", function () {
+                $("#infoDialog").html('Work time : ' + setUpVue.workTimeMin + ' minutes!<br/>Rest time : ' + setUpVue.restTimeMin + ' minutes!');
+                $("#infoDialog").dialog("open");
+            });
+        });
+    </script>
+    <noscript>Your browser does not support JavaScript!</noscript>
 </head>
 
 <body style="background-image: url('src/img/bg_main.jpg')">
@@ -196,7 +219,6 @@
             </div>
         </div>
     </div>
-
     <div class="balls">
         <div>
             <div id="mainTomatoBall" class="ball ball-now">
@@ -259,7 +281,7 @@
                 onclick="functionButtonCheck()">{{
                 tab.text }}</button>
             <div id="tomatoPageBtns" style="display:none;">
-                <button onclick="homePageGo()">INFO</button>
+                <button id="infoBtn">INFO</button>
                 <button id="homePageGoBtn" onclick="homePageGo()">BACK</button>
             </div>
         </div>
@@ -346,6 +368,7 @@
             }
         })
     </script>
+    <!--Dialog-->
+    <div id="infoDialog" title="Your time setting">your time set</div>
 </body>
-
 </html>
