@@ -166,8 +166,23 @@
 
         function functionButtonCheck() {
             if ($('#homeView').hasClass('init-home-view')) {
+                if (!checkIsPosNumber(setUpVue.workTimeMin) || !checkIsPosNumber(setUpVue.restTimeMin)) {
+                    return;
+                }
                 homePageLeaave();
             }
+        }
+        function checkIsPosNumber(obj) {
+            if (!obj || $.trim(obj) == "") {
+                return false;
+            }
+            if (isNaN(obj)) {
+                return false;
+            }
+            if (obj <= 0) {
+                return false;
+            }
+            return true;
         }
     </script>
 </head>
@@ -230,10 +245,12 @@
                     <div class="input-time">
                         <label for="workTimeInput">WORK TIME</label>
                         <input id="workTimeInput" maxlength="3" v-model='workTimeMin'>
+                        <span v-show='workTimeCheck'>Must be positive number</span>
                     </div>
                     <div class="input-time">
                         <label for="restTimeInput">REST TIME</label>
                         <input id="restTimeInput" maxlength="3" v-model='restTimeMin'>
+                        <span v-show='restTimeCheck'>Must be positive number</span>
                     </div>
                 </div>
             </div>
@@ -263,8 +280,19 @@
                     { id: 6, text: 'KEEP RESTING', note: 'as restPause' },
                 ]
             },
+            computed: {
+                workTimeCheck: function () {
+                    return !checkIsPosNumber(this.workTimeMin)
+                },
+                restTimeCheck: function () {
+                    return !checkIsPosNumber(this.restTimeMin)
+                }
+            },
             methods: {
                 functionButtonClick: function (id) {
+                    if (!checkIsPosNumber(setUpVue.workTimeMin) || !checkIsPosNumber(setUpVue.restTimeMin)) {
+                        return;
+                    }
                     switch (id) {
                         case 1: this.workStart(); break;
                         case 2: this.workPause(); break;
