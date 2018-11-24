@@ -191,6 +191,7 @@
                 autoOpen: false,
                 resizable: false,
                 draggable: false,
+                modal: true,
                 title: "Your time setting",
                 buttons: {
                     "OK": function () {
@@ -198,16 +199,16 @@
                     }
                 },
                 show: {
-                    effect: "explode",
+                    effect: "fade",
                     duration: 200
                 },
                 hide: {
-                    effect: "explode",
+                    effect: "fade",
                     duration: 200
                 }
             });
             $("#infoBtn").on("click", function () {
-                $("#infoDialog").html('Work time : ' + setUpVue.workTimeMin + ' minutes!<br/>Rest time : ' + setUpVue.restTimeMin + ' minutes!');
+                $("#infoDialog").html('Work time : ' + setUpVue.workTimeMin + ' minutes.<br/>Rest time : ' + setUpVue.restTimeMin + ' minutes.');
                 $("#infoDialog").dialog("open");
             });
         });
@@ -228,11 +229,11 @@
                     }
                 },
                 show: {
-                    effect: "explode",
+                    effect: "fade",
                     duration: 200
                 },
                 hide: {
-                    effect: "explode",
+                    effect: "fade",
                     duration: 200
                 }
             });
@@ -245,8 +246,9 @@
 </head>
 
 <body style="background-image: url('src/img/bg_main.jpg')">
-    <div id="disabledControl" style="display:none;"></div>
     <!--用來控制全頁disabled-->
+    <div id="disabledControl" style="display:none;"></div>
+    <!--首頁背景(含過場)-->
     <div id="homePage" class="home-page">
         <div id="homeView" class="init-home-view">
             <div class="home-view-head">
